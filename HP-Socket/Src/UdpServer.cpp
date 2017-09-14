@@ -909,7 +909,7 @@ UINT WINAPI CUdpServer::WorkerThreadProc(LPVOID pv)
 	}
 
 	pServer->OnWorkerThreadEnd(::GetCurrentThreadId());
-
+	pServer->m_pListener->OnWorkerThreadEnd(::GetCurrentThreadId());
 	return 0;
 }
 

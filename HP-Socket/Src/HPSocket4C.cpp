@@ -522,6 +522,13 @@
 	#pragma comment(linker, "/EXPORT:SYS_Utf8ToUnicode=_SYS_Utf8ToUnicode@12")
 	#pragma comment(linker, "/EXPORT:SYS_WSAGetLastError=_SYS_WSAGetLastError@0")
 	#pragma comment(linker, "/EXPORT:SYS_WSAIoctl=_SYS_WSAIoctl@28")
+    #pragma comment(linker, "/EXPORT:HP_Set_FN_Server_OnWorkerThreadEnd=_HP_Set_FN_Server_OnWorkerThreadEnd@8")
+	#pragma comment(linker, "/EXPORT:HP_Set_FN_Client_OnWorkerThreadEnd=_HP_Set_FN_Client_OnWorkerThreadEnd@8")
+	#pragma comment(linker, "/EXPORT:HP_Set_FN_Agent_OnWorkerThreadEnd=_HP_Set_FN_Agent_OnWorkerThreadEnd@8")
+	#pragma comment(linker, "/EXPORT:HP_Set_FN_HttpClient_OnWorkerThreadEnd=_HP_Set_FN_HttpClient_OnWorkerThreadEnd@8")
+	#pragma comment(linker, "/EXPORT:HP_Set_FN_HttpAgent_OnWorkerThreadEnd=_HP_Set_FN_HttpAgent_OnWorkerThreadEnd@8")
+	#pragma comment(linker, "/EXPORT:HP_Set_FN_HttpServer_OnWorkerThreadEnd=_HP_Set_FN_HttpServer_OnWorkerThreadEnd@8")
+
 
 #endif
 
@@ -3084,4 +3091,37 @@ HPSOCKET_API int __stdcall SYS_UrlEncode(BYTE* lpszSrc, DWORD dwSrcLen, BYTE* lp
 HPSOCKET_API int __stdcall SYS_UrlDecode(BYTE* lpszSrc, DWORD dwSrcLen, BYTE* lpszDest, DWORD* pdwDestLen)
 {
 	return ::UrlDecode(lpszSrc, dwSrcLen, lpszDest, *pdwDestLen);
+}
+
+HPSOCKET_API void __stdcall HP_Set_FN_Server_OnWorkerThreadEnd(HP_ServerListener pListener, HP_FN_OnWorkerThreadEnd fn)
+{
+	((C_HP_TcpServerListener*)pListener)->m_fnOnWorkerThreadEnd = fn;
+}
+
+HPSOCKET_API void __stdcall HP_Set_FN_Agent_OnWorkerThreadEnd(HP_AgentListener pListener, HP_FN_OnWorkerThreadEnd fn)
+{
+	((C_HP_TcpAgentListener*)pListener)->m_fnOnWorkerThreadEnd = fn;
+}
+
+
+HPSOCKET_API void __stdcall HP_Set_FN_Client_OnWorkerThreadEnd(HP_ClientListener pListener, HP_FN_OnWorkerThreadEnd fn)
+{
+	((C_HP_TcpClientListener*)pListener)->m_fnOnWorkerThreadEnd = fn;
+}
+
+HPSOCKET_API void __stdcall HP_Set_FN_HttpServer_OnWorkerThreadEnd(HP_HttpServerListener pListener, HP_FN_OnWorkerThreadEnd fn)
+{
+	((C_HP_HttpServerListener*)pListener)->m_lsnServer.m_fnOnWorkerThreadEnd = fn;
+}
+
+
+HPSOCKET_API void __stdcall HP_Set_FN_HttpAgent_OnWorkerThreadEnd(HP_HttpAgentListener pListener, HP_FN_OnWorkerThreadEnd fn)
+{
+	((C_HP_HttpAgentListener*)pListener)->m_lsnAgent.m_fnOnWorkerThreadEnd = fn;
+}
+
+
+HPSOCKET_API void __stdcall HP_Set_FN_HttpClient_OnWorkerThreadEnd(HP_HttpClientListener pListener, HP_FN_OnWorkerThreadEnd fn)
+{
+	((C_HP_HttpClientListener*)pListener)->m_lsnClient.m_fnOnWorkerThreadEnd = fn;
 }

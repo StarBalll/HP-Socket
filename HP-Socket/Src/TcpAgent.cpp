@@ -856,6 +856,7 @@ UINT WINAPI CTcpAgent::WorkerThreadProc(LPVOID pv)
 	}
 
 	pAgent->OnWorkerThreadEnd(::GetCurrentThreadId());
+	pAgent->m_pListener->OnWorkerThreadEnd(::GetCurrentThreadId());
 
 	return 0;
 }

@@ -79,7 +79,15 @@ public:
 
 template<class T, class L, size_t offset = 0> class C_HP_ServerListenerT : public L
 {
-public:
+public:	
+	
+	virtual EnHandleResult OnHandShake(T* pSender, CONNID dwConnID)
+	{
+		return	(m_fnOnHandShake)
+				? m_fnOnHandShake(C_HP_Object::FromSecond<offset>(pSender), dwConnID)
+				: HR_IGNORE;
+	}
+
 	virtual EnHandleResult OnPrepareListen(T* pSender, SOCKET soListen)
 	{
 		return	(m_fnOnPrepareListen)
@@ -94,11 +102,9 @@ public:
 				: HR_IGNORE;
 	}
 
-	virtual EnHandleResult OnHandShake(T* pSender, CONNID dwConnID)
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)
 	{
-		return	(m_fnOnHandShake)
-				? m_fnOnHandShake(C_HP_Object::FromSecond<offset>(pSender), dwConnID)
-				: HR_IGNORE;
+		 	if(m_fnOnWorkerThreadEnd)  m_fnOnWorkerThreadEnd(dwThreadId);
 	}
 
 	virtual EnHandleResult OnSend(T* pSender, CONNID dwConnID, const BYTE* pData, int iLength)
@@ -152,10 +158,12 @@ public:
 	, m_fnOnPullReceive		(nullptr)
 	, m_fnOnClose			(nullptr)
 	, m_fnOnShutdown		(nullptr)
+	, m_fnOnWorkerThreadEnd  (nullptr)
 	{
 	}
 
 public:
+	HP_FN_OnWorkerThreadEnd  m_fnOnWorkerThreadEnd;
 	HP_FN_Server_OnPrepareListen	m_fnOnPrepareListen	;
 	HP_FN_Server_OnAccept			m_fnOnAccept		;
 	HP_FN_Server_OnHandShake		m_fnOnHandShake		;
@@ -169,6 +177,12 @@ public:
 template<class T, class L, size_t offset = 0> class C_HP_AgentListenerT : public L
 {
 public:
+	
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)
+	{
+		 	if(m_fnOnWorkerThreadEnd)  m_fnOnWorkerThreadEnd(dwThreadId);
+	}
+
 	virtual EnHandleResult OnPrepareConnect(T* pSender, CONNID dwConnID, SOCKET socket)
 	{
 		return	(m_fnOnPrepareConnect)
@@ -241,10 +255,12 @@ public:
 	, m_fnOnPullReceive		(nullptr)
 	, m_fnOnClose			(nullptr)
 	, m_fnOnShutdown		(nullptr)
+	, m_fnOnWorkerThreadEnd  (nullptr)
 	{
 	}
 
 public:
+	HP_FN_OnWorkerThreadEnd  m_fnOnWorkerThreadEnd;
 	HP_FN_Agent_OnPrepareConnect	m_fnOnPrepareConnect;
 	HP_FN_Agent_OnConnect			m_fnOnConnect		;
 	HP_FN_Agent_OnHandShake			m_fnOnHandShake		;
@@ -258,6 +274,12 @@ public:
 template<class T, class L, size_t offset = 0> class C_HP_ClientListenerT : public L
 {
 public:
+	
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)
+	{
+		 	if(m_fnOnWorkerThreadEnd)  m_fnOnWorkerThreadEnd(dwThreadId);
+	}
+
 	virtual EnHandleResult OnPrepareConnect(T* pSender, CONNID dwConnID, SOCKET socket)
 	{
 		return	(m_fnOnPrepareConnect)
@@ -322,10 +344,12 @@ public:
 	, m_fnOnReceive			(nullptr)
 	, m_fnOnPullReceive		(nullptr)
 	, m_fnOnClose			(nullptr)
+	, m_fnOnWorkerThreadEnd  (nullptr)
 	{
 	}
 
 public:
+	HP_FN_OnWorkerThreadEnd  m_fnOnWorkerThreadEnd;
 	HP_FN_Client_OnPrepareConnect	m_fnOnPrepareConnect;
 	HP_FN_Client_OnConnect			m_fnOnConnect		;
 	HP_FN_Client_OnHandShake		m_fnOnHandShake		;
@@ -536,6 +560,8 @@ public:
 	virtual EnHandleResult OnWSMessageComplete(IHttpServer* pSender, CONNID dwConnID)
 		{return m_lsnHttp.OnWSMessageComplete(pSender, dwConnID);}
 
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)
+		{return m_lsnServer.OnWorkerThreadEnd(dwThreadId);}
 	virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, UINT_PTR soListen)
 		{return m_lsnServer.OnPrepareListen(pSender, soListen);}
 	virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient)
@@ -591,6 +617,8 @@ public:
 	virtual EnHandleResult OnWSMessageComplete(IHttpAgent* pSender, CONNID dwConnID)
 		{return m_lsnHttp.OnWSMessageComplete(pSender, dwConnID);}
 
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)
+		{return m_lsnAgent.OnWorkerThreadEnd(dwThreadId);}
 	virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, UINT_PTR socket)
 		{return m_lsnAgent.OnPrepareConnect(pSender, dwConnID, socket);}
 	virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID)
@@ -646,6 +674,8 @@ public:
 	virtual EnHandleResult OnWSMessageComplete(IHttpClient* pSender, CONNID dwConnID)
 		{return m_lsnHttp.OnWSMessageComplete(pSender, dwConnID);}
 
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)
+		{return m_lsnClient.OnWorkerThreadEnd(dwThreadId);}
 	virtual EnHandleResult OnPrepareConnect(ITcpClient* pSender, CONNID dwConnID, UINT_PTR socket)
 		{return m_lsnClient.OnPrepareConnect(pSender, dwConnID, socket);}
 	virtual EnHandleResult OnConnect(ITcpClient* pSender, CONNID dwConnID)

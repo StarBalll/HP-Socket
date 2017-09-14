@@ -1882,3 +1882,12 @@ HPSOCKET_API DWORD __stdcall SYS_GuessUrlDecodeBound(const BYTE* lpszSrc, DWORD 
 HPSOCKET_API int __stdcall SYS_UrlEncode(BYTE* lpszSrc, DWORD dwSrcLen, BYTE* lpszDest, DWORD* pdwDestLen);
 // URL 解码（返回值：0 -> 成功，-3 -> 输入数据不正确，-5 -> 输出缓冲区不足）
 HPSOCKET_API int __stdcall SYS_UrlDecode(BYTE* lpszSrc, DWORD dwSrcLen, BYTE* lpszDest, DWORD* pdwDestLen);
+
+
+typedef void (__stdcall *HP_FN_OnWorkerThreadEnd)		(DWORD dwThreadId);
+HPSOCKET_API void __stdcall HP_Set_FN_Server_OnWorkerThreadEnd(HP_ServerListener pListener, HP_FN_OnWorkerThreadEnd fn);
+HPSOCKET_API void __stdcall HP_Set_FN_Agent_OnWorkerThreadEnd(HP_AgentListener pListener, HP_FN_OnWorkerThreadEnd fn);
+HPSOCKET_API void __stdcall HP_Set_FN_Client_OnWorkerThreadEnd(HP_ClientListener pListener, HP_FN_OnWorkerThreadEnd fn);
+HPSOCKET_API void __stdcall HP_Set_FN_HttpServer_OnWorkerThreadEnd(HP_HttpServerListener pListener, HP_FN_OnWorkerThreadEnd fn);
+HPSOCKET_API void __stdcall HP_Set_FN_HttpAgent_OnWorkerThreadEnd(HP_HttpAgentListener pListener, HP_FN_OnWorkerThreadEnd fn);;
+HPSOCKET_API void __stdcall HP_Set_FN_HttpClient_OnWorkerThreadEnd(HP_HttpClientListener pListener, HP_FN_OnWorkerThreadEnd fn);

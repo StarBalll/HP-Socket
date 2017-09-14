@@ -932,6 +932,8 @@ template<class T> class ISocketListenerT
 {
 public:
 
+	virtual void OnWorkerThreadEnd(DWORD dwThreadID) = 0;
+
 	/*
 	* 名称：握手完成通知
 	* 描述：连接完成握手时，Socket 监听器将收到该通知，监听器接收到该通知后才能开始
@@ -1064,6 +1066,7 @@ public:
 class CTcpServerListener : public ITcpServerListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen)							{return HR_IGNORE;}
 	virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient)				{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID)								{return HR_IGNORE;}
@@ -1100,6 +1103,7 @@ public:
 class CUdpServerListener : public IUdpServerListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareListen(IUdpServer* pSender, SOCKET soListen)						{return HR_IGNORE;}
 	virtual EnHandleResult OnAccept(IUdpServer* pSender, CONNID dwConnID, UINT_PTR pSockAddr)			{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(IUdpServer* pSender, CONNID dwConnID)							{return HR_IGNORE;}
@@ -1159,6 +1163,7 @@ public:
 class CTcpAgentListener : public ITcpAgentListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket)				{return HR_IGNORE;}
 	virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID)									{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID)									{return HR_IGNORE;}
@@ -1230,6 +1235,7 @@ public:
 class CTcpClientListener : public ITcpClientListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareConnect(ITcpClient* pSender, CONNID dwConnID, SOCKET socket)			{return HR_IGNORE;}
 	virtual EnHandleResult OnConnect(ITcpClient* pSender, CONNID dwConnID)									{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(ITcpClient* pSender, CONNID dwConnID)								{return HR_IGNORE;}
@@ -1265,6 +1271,7 @@ public:
 class CUdpClientListener : public IUdpClientListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareConnect(IUdpClient* pSender, CONNID dwConnID, SOCKET socket)			{return HR_IGNORE;}
 	virtual EnHandleResult OnConnect(IUdpClient* pSender, CONNID dwConnID)									{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(IUdpClient* pSender, CONNID dwConnID)								{return HR_IGNORE;}
@@ -1289,6 +1296,7 @@ public:
 class CUdpCastListener : public IUdpCastListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareConnect(IUdpCast* pSender, CONNID dwConnID, SOCKET socket)				{return HR_IGNORE;}
 	virtual EnHandleResult OnConnect(IUdpCast* pSender, CONNID dwConnID)									{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(IUdpCast* pSender, CONNID dwConnID)									{return HR_IGNORE;}
@@ -1993,6 +2001,7 @@ public:
 class CHttpServerListener : public IHttpServerListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareListen(ITcpServer* pSender, SOCKET soListen)										{return HR_IGNORE;}
 	virtual EnHandleResult OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR soClient)							{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(ITcpServer* pSender, CONNID dwConnID)											{return HR_IGNORE;}
@@ -2021,6 +2030,7 @@ public:
 class CHttpAgentListener : public IHttpAgentListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareConnect(ITcpAgent* pSender, CONNID dwConnID, SOCKET socket)							{return HR_IGNORE;}
 	virtual EnHandleResult OnConnect(ITcpAgent* pSender, CONNID dwConnID)												{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(ITcpAgent* pSender, CONNID dwConnID)												{return HR_IGNORE;}
@@ -2050,6 +2060,7 @@ public:
 class CHttpClientListener : public IHttpClientListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnPrepareConnect(ITcpClient* pSender, CONNID dwConnID, SOCKET socket)						{return HR_IGNORE;}
 	virtual EnHandleResult OnConnect(ITcpClient* pSender, CONNID dwConnID)												{return HR_IGNORE;}
 	virtual EnHandleResult OnHandShake(ITcpClient* pSender, CONNID dwConnID)											{return HR_IGNORE;}
@@ -2078,6 +2089,7 @@ public:
 class CHttpSyncClientListener : public CHttpClientListener
 {
 public:
+	virtual void OnWorkerThreadEnd(DWORD dwThreadId)							{}
 	virtual EnHandleResult OnClose(ITcpClient* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode)	{return HR_IGNORE;}
 
 	virtual EnHttpParseResult OnHeadersComplete(IHttpClient* pSender, CONNID dwConnID)									{return HPR_OK;}

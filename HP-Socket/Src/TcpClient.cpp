@@ -263,6 +263,7 @@ UINT WINAPI CTcpClient::WorkerThreadProc(LPVOID pv)
 	}
 
 	pClient->OnWorkerThreadEnd(::GetCurrentThreadId());
+	pClient->m_pListener->OnWorkerThreadEnd(::GetCurrentThreadId());
 
 	if(bCallStop && pClient->HasStarted())
 		pClient->Stop();
