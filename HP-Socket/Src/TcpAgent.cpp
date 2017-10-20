@@ -1,7 +1,7 @@
 /*
  * Copyright: JessMA Open Source (ldcsaa@gmail.com)
  *
- * Version	: 5.0.1
+ * Version	: 5.0.2
  * Author	: Bruce Liang
  * Website	: http://www.jessma.org
  * Project	: https://github.com/ldcsaa
@@ -947,8 +947,7 @@ void CTcpAgent::HandleSend(CONNID dwConnID, TSocketObj* pSocketObj, TBufferObj* 
 	{
 	case SP_PACK:
 		{
-			long sndCount = ::InterlockedExchangeAdd(&pSocketObj->sndCount, iLength);
-			ASSERT(sndCount + iLength >= 0);
+			::InterlockedExchangeAdd(&pSocketObj->sndCount, iLength);
 
 			TriggerFireSend(pSocketObj, pBufferObj);
 
@@ -958,8 +957,7 @@ void CTcpAgent::HandleSend(CONNID dwConnID, TSocketObj* pSocketObj, TBufferObj* 
 		break;
 	case SP_SAFE:
 		{
-			long sndCount = ::InterlockedExchangeAdd(&pSocketObj->sndCount, iLength);
-			ASSERT(sndCount + iLength >= 0);
+			::InterlockedExchangeAdd(&pSocketObj->sndCount, iLength);
 
 			TriggerFireSend(pSocketObj, pBufferObj);
 
